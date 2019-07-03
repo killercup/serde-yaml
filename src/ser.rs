@@ -397,8 +397,11 @@ where
 {
     let doc = to_yaml(value)?;
     let mut writer_adapter = FmtToIoWriter { writer: writer };
-    YamlEmitter::new(&mut writer_adapter)
-        .dump(&doc)
+
+    let mut emit = YamlEmitter::new(&mut writer_adapter);
+    emit.multiline_strings(true);
+
+    emit.dump(&doc)
         .map_err(private::error_emitter)?;
     Ok(())
 }
